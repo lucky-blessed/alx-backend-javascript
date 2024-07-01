@@ -5,7 +5,7 @@ export default function taskBlock(trueOrFalse) {
     if (trueOrFalse) {
         const innerTask = true;
         const innerTask2 = false;
-        return [innerTask, innerTask2];
+        return [innerTask2, innerTask];
     }
 
     return [task, task2];
