@@ -3,7 +3,7 @@ function getPaymentTokenFromApi(success) {
         if (success) {
             resolve({ data: 'Successful response from the API'});
         } else {
-
+            resolve(null);
         }
     });
 }
