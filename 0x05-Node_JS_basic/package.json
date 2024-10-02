@@ -7,18 +7,19 @@
         "lint": "./node_modules/.bin/eslint",
         "check-lint": "lint [0-9]*.js",
         "test": "./node_modules/.bin/mocha --require @babel/register --exit",
-        "dev": "nodemon --exec babel-node --presets babel-preset-env ./server.js ./database.csv"
+        "dev": "nodemon --exec npx babel-node --presets @babel/preset-env ./full_server/server.js ./database.csv"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "axios": "^1.7.7",
         "chai-http": "^4.4.0",
-        "express": "^4.18.2"
+        "express": "^4.21.0"
     },
     "devDependencies": {
-        "@babel/cli": "^7.23.0",
+        "@babel/cli": "^7.25.6",
         "@babel/core": "^7.25.2",
+        "@babel/node": "^7.25.0",
         "@babel/preset-env": "^7.25.4",
         "@babel/register": "^7.24.6",
         "chai": "^4.3.7",
