@@ -11,9 +11,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^10.7.3"
-  },
-  "dependencies": {
-    "chai": "^5.1.1"
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "sinon": "^19.0.2"
   }
 }
