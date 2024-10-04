@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "0x06-unittests_in_js",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "mocha"
   },
@@ -11,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "mocha": "^10.7.3"
+  },
+  "dependencies": {
+    "chai": "^5.1.1"
   }
 }
