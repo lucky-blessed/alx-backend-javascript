@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "0x06-unittests_in_js",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "mocha 2-calcul_chai.test.js"
   },
@@ -11,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "chai": "^5.1.1",
     "mocha": "^10.7.3",
     "sinon": "^19.0.2"
+  },
+  "dependencies": {
+    "chai": "^4.2.0"
   }
 }
