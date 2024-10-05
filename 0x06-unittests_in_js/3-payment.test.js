@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import sinon from 'sinon';
-import { Utils } from "./utils.js";
-import { sendPaymentRequestToApi } from "./3-payment.js";
+const { expect } = require("chai");
+const sinon = require('sinon');
+const { Utils } = require('./utils.js');
+const { sendPaymentRequestToApi } = require('./3-payment.js');
 
 describe('sendPaymentRequestToApi', function () {
     let spy;
