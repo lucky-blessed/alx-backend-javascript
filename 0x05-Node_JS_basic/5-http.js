@@ -1,72 +1,70 @@
 const http = require('http');
-const url = require('url');
-const fs = require('fs');
-const path = require('path');
+const { readFile } = require('fs');
 
-function countStudents(database) {
-    return new Promise((resolve, reject) => {
-        fs.readFile(database, 'utf8', (err, data) => {
-            if (err) {
-                reject(new Error('Cannot load the database'));
-                return;
+const hostname = '127.0.0.1';
+const port = 1245;
+
+function countStudents(fileName) {
+  const students = {};
+  const fields = {};
+  let length = 0;
+  return new Promise((resolve, reject) => {
+    readFile(fileName, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        let output = '';
+        const lines = data.toString().split('\n');
+        for (let i = 0; i < lines.length; i += 1) {
+          if (lines[i]) {
+            length += 1;
+            const field = lines[i].toString().split(',');
+            if (Object.prototype.hasOwnProperty.call(students, field[3])) {
+              students[field[3]].push(field[0]);
+            } else {
+              students[field[3]] = [field[0]];
             }
-
-            const lines = data.trim().split('\n');
-            const students = lines.slice(1).filter(line => line.trim() !== '');
-
-            const fields = {};
-            let totalStudents = 0;
-
-            students.forEach((student) => {
-                const details = student.split(',');
-                const field = details[3];
-                const firstName = details[0];
-                totalStudents += 1;
-
-                if (!fields[field]) {
-                    fields[field] = [];
-                }
-                fields[field].push(firstName);
-            });
-
-            let output = `Number of students: ${totalStudents}\n`;
-            for (const [field, names] of Object.entries(fields)) {
-                output += `Number of students in ${field}: ${names.length}. List: ${names.join(', ')}\n`;
+            if (Object.prototype.hasOwnProperty.call(fields, field[3])) {
+              fields[field[3]] += 1;
+            } else {
+              fields[field[3]] = 1;
             }
-
-            resolve(output.trim());
-        });
+          }
+        }
+        const l = length - 1;
+        output += `Number of students: ${l}\n`;
+        for (const [key, value] of Object.entries(fields)) {
+          if (key !== 'field') {
+            output += `Number of students in ${key}: ${value}. `;
+            output += `List: ${students[key].join(', ')}\n`;
+          }
+        }
+        resolve(output);
+      }
     });
+  });
 }
 
-const app = http.createServer((req, res) => {
-    const parsedUrl = url.parse(req.url, true);
-
-    if (parsedUrl.pathname === '/') {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end('Hello Holberton School!');
-    } else if (parsedUrl.pathname === '/students') {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.write('This is the list of our students\n');
-
-        const database = process.argv[2];
-
-        countStudents(database)
-            .then((output) => {
-                res.end(output);
-            })
-            .catch((err) => {
-                res.end(err.message);
-            });
-    } else {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('Not Found');
-    }
+const app = http.createServer((request, response) => {
+  response.statusCode = 200;
+  response.setHeader('Content-Type', 'text/plain');
+  if (request.url === '/') {
+    response.write('Hello Holberton School!');
+    response.end();
+  }
+  if (request.url === '/students') {
+    response.write('This is the list of our students\n');
+    countStudents(process.argv[2].toString()).then((output) => {
+      const outString = output.slice(0, -1);
+      response.end(outString);
+    }).catch(() => {
+      response.statusCode = 404;
+      response.end('Cannot load the database');
+    });
+  }
 });
 
-const port = 1245;
-app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
+app.listen(port, hostname, () => {
 });
 
 module.exports = app;

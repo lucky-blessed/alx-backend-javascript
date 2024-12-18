@@ -1,27 +1,16 @@
-const { expect } = require("chai");
-const sinon = require('sinon');
-const { Utils } = require("./utils.js");
-const { sendPaymentRequestToApi } = require("./4-payment.js");
+const {describe, it} = require("mocha");
+const sinon = require("sinon");
+const sendPaymentRequestToApi = require("./4-payment");
+const Utils = require("./utils");
+const assert = require("assert");
 
+describe("sendPaymentRequestToApi", function() {
+    it("check that Utils.calculateNumber is stubbed", function() {
+	const spy = sinon.spy(console, "log");
+	const stub = sinon.stub(Utils, "calculateNumber").returns(10);
+	sendPaymentRequestToApi(100, 20);
 
-describe('sendPaymentRequestToApi', function () {
-    let stub, consoleSpy;
-
-    beforeEach(function () {
-        stub = sinon.stub(Utils, 'calculateNumber').returns(10);
-        consoleSpy = sinon.spy(console, 'log');
-    });
-
-    afterEach(function () {
-        stub.restore();
-        consoleSpy.restore();
-    });
-
-    it('should call Utils.calculateNumber with SUM, 100, 20 and return 10', function () {
-        sendPaymentRequestToApi(100, 20);
-        expect(stub.calledOnce).to.be.true;
-        expect(stub.calledWith('SUM', 100, 20)).to.be.true;
-        expect(consoleSpy.calledOnce).to.be.true;
-        expect(consoleSpy.calledWith('The total is: 10')).to.be.true;
+	assert(spy.withArgs("The total is: 10").calledOnce);
+	assert(stub.withArgs("SUM", 100, 20).calledOnce);
     });
 });
